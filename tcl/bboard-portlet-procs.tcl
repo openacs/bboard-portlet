@@ -38,8 +38,6 @@ namespace eval bboard_portlet {
 	set key "instance_id"
 	set value [portal::get_element_param $element_id $key]
 
-	ns_log Notice "AKSbboard-portlet: instance_id's value: $value"
-	
 	portal::set_element_param $element_id $key $instance_id
 
 	return $element_id
@@ -52,9 +50,9 @@ namespace eval bboard_portlet {
 	@creation-date Sept 2001
     } {
 
-	ns_log notice "AKS28 [array get cf]"
-	
-	return "<b>[array get cf]</b>"
+	array set config $cf	
+
+	return "<b>This is the instance_id $config(instance_id)</b>"
 
     }
 
@@ -88,5 +86,12 @@ namespace eval bboard_portlet {
 	set element_id [portal::remove_element {$portal_id $element_id}]
     }
 
+    ad_proc -private dummy {} {
+	This is very strange. If this proc is not here, the one above 
+	dosen't show up.
+    }
+    {
+	return 1
+    }
 
 } # namespace
