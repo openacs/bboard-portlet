@@ -103,7 +103,11 @@ namespace eval bboard_portlet {
 
 	# Added by Ben
 	foreach instance_id $list_of_instance_ids {
-	    append whole_data "<font size=+1><b>[db_string select_name "select name from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" -default ""]</b></font> (<a href=[dotlrn_community::get_url_from_package_id -package_id $instance_id]>more</a>)<br>"
+            
+            set url [dotlrn_community::get_url_from_package_id -package_id $instance_id]
+
+
+	    append whole_data "<font size=+1><b>[db_string select_name "select name from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" -default ""]</b></font> (<a href=${url}>more</a>)<br>"
 
 	    set data ""
 	    set rowcount 0
@@ -111,7 +115,7 @@ namespace eval bboard_portlet {
 	    if { $config(shaded_p) == "f" } {
 		
 		db_foreach select_messages $query {
-		    append data "<li><a href=bboard/message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
+		    append data "<li><a href=${url}message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
 		    incr rowcount
 		}
 		
@@ -128,7 +132,7 @@ namespace eval bboard_portlet {
 		set data "Forums: "
 		
 		db_foreach select_shaded $shaded_query {
-		    append data "<a href=bboard/forum?forum_id=${forum_id}>$short_name</a>"
+		    append data "<a href=${url}forum?forum_id=${forum_id}>$short_name</a>"
 		    incr rowcount
 		}
 		
