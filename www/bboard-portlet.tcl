@@ -32,4 +32,6 @@ db_multirow forums select_forums "
            bboard_forums.short_name
     from bboard_forums
     where bboard_forums.bboard_id in ([join $list_of_instance_ids ,])
+    order by parent_name,
+             bboard_forums.short_name
 "

@@ -27,9 +27,14 @@
     set old_package_id ""
 %>
 
-<multiple name="forums"
+<multiple name="forums">
 
 <% set new_package_id $forums(package_id) %>
+
+  <if @one_instance_p@ false and @new_package_id@ ne @old_package_id@ and @old_package_id@ ne "">
+      <br>
+    </ul>
+  </if>
 
   <if @one_instance_p@ false and @new_package_id@ ne @old_package_id@>
     <li>@forums.parent_name@
@@ -43,10 +48,6 @@
 <%
     set old_package_id $new_package_id
 %>
-
-  <if @one_instance_p@ false and @new_package_id@ ne @old_package_id@>
-    </ul>
-  </if>
 
 </multiple>
 
