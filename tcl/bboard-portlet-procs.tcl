@@ -70,7 +70,7 @@ namespace eval bboard_portlet {
 	to_char(last_reply_date,'MM/DD/YY hh12:Mi am') as last_updated
 	from bboard_messages_all b, persons, acs_objects ao
 	where b.forum_id = ao.object_id
-	and bboard_id = $config(instance_id)
+	and forum_id in (select forum_id from bboard_forums where bboard_id = $config(instance_id))
 	and person_id = sender
 	and reply_to is null
 	order by sent_date desc"
