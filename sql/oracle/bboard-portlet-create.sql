@@ -21,6 +21,7 @@ begin
     data_type        => 'tcl_proc',
     mime_type        => 'text/html',
     name             => 'bboard-portlet',
+    link             => 'bboard',
     description      => 'Displays the bboard for a given instance_id ',
     content	     => 'bboard_portlet::show',
     configurable_p   => 't'
