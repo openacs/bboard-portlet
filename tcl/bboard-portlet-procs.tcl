@@ -106,8 +106,15 @@ namespace eval bboard_portlet {
             
             set url [dotlrn_community::get_url_from_package_id -package_id $instance_id]
 
+            # aks fold into site_nodes:: or dotlrn_community
+            set comm_object_id [db_string select_name "select object_id from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" ]
 
-	    append whole_data "<font size=+1><b>[db_string select_name "select name from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" -default ""]</b></font> (<a href=${url}>more</a>)<br>"
+            set name [db_string select_pretty_name "
+                select instance_name 
+                from apm_packages
+                where package_id= :comm_object_id "]
+
+	    append whole_data "<font size=+1>$name</font> (<a href=${url}>more</a>)<br>"
 
 	    set data ""
 	    set rowcount 0
