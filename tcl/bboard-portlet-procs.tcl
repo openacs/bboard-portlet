@@ -71,16 +71,14 @@ namespace eval bboard_portlet {
 	order by sent_date desc"
 
 	set data ""
-	set data:rowcount 0
+	set rowcount 0
 
 	db_foreach select_messages $query {
 	    append data "<tr><td>$title</td><td>$full_name</td><td>$num_replies</td><td>$last_updated</td>"
-	    incr data:rowcount
+	    incr rowcount
 	} 
 
-
 	set template "
-
 	<table celpadding=\"0\" cellspacing=\"0\" border=\"0\">
 	<tr bgcolor=\"#ECECEC\">
 	<th align=\"left\">Subject</th> 
@@ -89,11 +87,16 @@ namespace eval bboard_portlet {
 	<th align=\"left\">Last update</th>
 	</tr>
 	$data
-	</table>
-		"
+	</table>"
+
+	ns_log notice "AKS31 got here $rowcount"
+
+	if {!$rowcount} {
+	    set template "<i>No messages</i>"
+	}
 
 	set code [template::adp_compile -string $template]
-	ns_log notice "AKS31 got here $code"
+
 	set output [template::adp_eval code]
 	ns_log notice "AKS32 got here $output"
 	
