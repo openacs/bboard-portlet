@@ -79,7 +79,9 @@ namespace eval bboard_portlet {
 	set rowcount 0
 	
 	db_foreach select_messages $query {
-	    append data "<tr><td>$title</td><td>$full_name</td><td>$num_replies</td><td>$last_updated</td>"
+	    # BEN OVERRIDE
+	    # append data "<tr><td>$title</td><td>$full_name</td><td>$num_replies</td><td>$last_updated</td>"
+	    append data "<li><a href=bboard/message?forum_id=$forum_id&message_id=$message_id>$title</a>, by <i>$full_name</i>\n"
 	    incr rowcount
 	} 
 	
@@ -93,6 +95,11 @@ namespace eval bboard_portlet {
 	</tr>
 	$data
 	</table>"
+
+	## BEN TEMPLATE OVERRIDE
+	set template "<ul>
+	$data
+	</ul>"
 	
 	ns_log notice "AKS31 got here $rowcount"
 	
