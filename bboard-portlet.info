@@ -32,7 +32,7 @@
             <file type="content_page" path="www/show.tcl"/>
         </files>
         <parameters>
-        <!-- No version parameters -->
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="bboard_portlet_region"  default="1" description="the defailt region for this portlet"/>
         </parameters>
 
     </version>

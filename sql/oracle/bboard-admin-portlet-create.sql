@@ -125,8 +125,8 @@ begin
 	foo := acs_sc_impl.new_alias (
 	       'portal_datasource',
 	       'bboard_admin_portlet',
-	       'MyName',
-	       'bboard_admin_portlet::my_name',
+	       'GetMyName',
+	       'bboard_admin_portlet::get_my_name',
 	       'TCL'
 	);
 
@@ -175,22 +175,6 @@ begin
 	       'bboard_admin_portlet',
 	       'RemoveSelfFromPage',
 	       'bboard_admin_portlet::remove_self_from_page',
-	       'TCL'
-	);
-
-	foo := acs_sc_impl.new_alias (
-	       'portal_datasource',
-	       'bboard_admin_portlet',
-	       'MakeSelfAvailable',
-	       'bboard_admin_portlet::make_self_available',
-	       'TCL'
-	);
-
-	foo := acs_sc_impl.new_alias (
-	       'portal_datasource',
-	       'bboard_admin_portlet',
-	       'MakeSelfUnavailable',
-	       'bboard_admin_portlet::make_self_unavailable',
 	       'TCL'
 	);
 
