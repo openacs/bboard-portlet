@@ -24,6 +24,11 @@ namespace eval bboard_portlet {
 	return "Discussion Forums"
     }
 
+    ad_proc -private my_package_key {
+    } {
+        return "bboard-portlet"
+    }
+
     ad_proc -public link {
     } {
 	return "forums"
@@ -73,106 +78,11 @@ namespace eval bboard_portlet {
 	@author arjun@openforce.net
 	@creation-date Sept 2001
     } {
-	
-	array set config $cf	
-	
-	set query  "
-        select message_id, 
-	forum_id,
-	title, 
-	num_replies,
-	first_names||' '||last_name as full_name,
-	to_char(last_reply_date,'MM/DD/YY hh12:Mi am') as last_updated
-	from bboard_messages_all b, persons, acs_objects ao
-	where b.forum_id = ao.object_id
-	and forum_id in (select forum_id 
-	from bboard_forums 
-	where bboard_id = :instance_id)
-	and person_id = sender
-	and reply_to is null
-	order by sent_date desc"
-
-	set shaded_query  "
-        select forum_id, short_name
-	from bboard_forums 
-	where bboard_id = :instance_id"
-
-        #
-        # YES, I will clean this up! - aks
-        #
-
-
-	set whole_data "<table border=0 cellpadding=2 cellspacing=2 width=100%>"
-	# Should be a list already! (ben)
-	set list_of_instance_ids $config(instance_id)
-
-	# Added by Ben
-	foreach instance_id $list_of_instance_ids {
-            
-            set url [dotlrn_community::get_url_from_package_id -package_id $instance_id]
-
-            # aks fold into site_nodes:: or dotlrn_community
-            set comm_object_id [db_string select_name "select object_id from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" ]
-
-            set name [db_string select_pretty_name "
-                select instance_name 
-                from apm_packages
-                where package_id= :comm_object_id "]
-
-	    append whole_data "<tr><td><a href=${url}><b>$name</b></a></td></tr>"
-
-	    set data ""
-	    set rowcount 0
-            
-# removed individual msg stuff
-# 
-#            if { $config(shaded_p) == "f" } {
-#                
-#                db_foreach select_messages $query {
-#                    append data "<li><a href=${url}message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
-#                    incr rowcount
-#                }
-#                
-#                set template "<ul>$data</ul>"
-#                
-#                if {!$rowcount} {
-#                    set template "<i>No messages</i>"
-#                }
-#                
-#                append template "<p>"
-#                
-#            } else {
-#                # shaded	
-#
- 
-        set data ""		
-        db_foreach select_shaded $shaded_query {
-                if { $config(shaded_p) == "f" } {
-                    append data "<tr><td>&nbsp;&nbsp;<a href=${url}forum?forum_id=${forum_id}>$short_name</a></td></tr>"
-                } 
-            incr rowcount
-        }
-    
-    set template "$data"
-    
-    if {!$rowcount} {
-        set template "<tr><td><i>No discussion forums</i></td></tr>"
-    }
-# }
-
-append whole_data $template
-
-
-}
-
-append whole_data "</table>"
-
-	set code [template::adp_compile -string $whole_data]
-	
-	set output [template::adp_eval code]
-	
-	return $output
-	
+        # no return call required with the helper proc
+        portal::show_proc_helper \
+                -package_key [my_package_key] \
+                -config_list $cf \
+                -template_src "bboard-portlet"
     }   
 
     ad_proc -public edit { 
