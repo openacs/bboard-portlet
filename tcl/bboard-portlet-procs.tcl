@@ -82,7 +82,7 @@ namespace eval bboard_portlet {
 	db_foreach select_messages $query {
 	    # BEN OVERRIDE
 	    # append data "<tr><td>$title</td><td>$full_name</td><td>$num_replies</td><td>$last_updated</td>"
-	    append data "<li><a href=bboard/message?forum_id=$forum_id&message_id=$message_id>$title</a>, by <i>$full_name</i>\n"
+	    append data "<li><a href=bboard/message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
 	    incr rowcount
 	} 
 	
