@@ -10,6 +10,7 @@
     <version name="0.1a" url="http://dotlrn.openforce.net/bboard-portlet-0.1a.apm">
     <database-support>
         <database>oracle</database>
+        <database>postgresql</database>
     </database-support>
         <owner> url=&quot;mailto:arjun@openforce.net&quot;&gt;Arjun Sanyal</owner>
         <summary>Creates bboard datasources for portal.</summary>
@@ -22,8 +23,6 @@
             <file type="package_spec" path="bboard-portlet.info"/>
             <file type="data_model_create" db_type="oracle" path="sql/oracle/bboard-portlet-create.sql"/>
             <file type="data_model_drop" db_type="oracle" path="sql/oracle/bboard-portlet-drop.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/bboard-portlet-sc-create.sql"/>
-            <file type="data_model" db_type="oracle" path="sql/oracle/bboard-portlet-sc-drop.sql"/>
             <file type="tcl_procs" path="tcl/bboard-portlet-procs.tcl"/>
         </files>
         <parameters>
