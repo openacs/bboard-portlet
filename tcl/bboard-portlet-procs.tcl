@@ -27,6 +27,7 @@ namespace eval bboard_portlet {
     ad_proc -public add_self_to_page { 
 	page_id 
 	instance_id 
+	args
     } {
 	Adds a bboard PE to the given page with the instance key being
 	opaque data in the portal configuration.
@@ -34,6 +35,7 @@ namespace eval bboard_portlet {
 	@return element_id The new element's id
 	@param page_id The page to add self to
 	@param instance_id The bboard instace to show
+	@param args an arg string not used
 	@author arjun@openforce.net
 	@creation-date Sept 2001
     } {
