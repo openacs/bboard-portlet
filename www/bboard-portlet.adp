@@ -1,37 +1,23 @@
+<if @shaded_p@ ne "t">
 
+  <if @no_forums_p@ eq "f">
 
-<%
-set ul_output_p 0
-        
-foreach forum $forums {
-        set forum_name [lindex $forum 0]
-        set forum_url [lindex $forum 1]
-        set forum_forums [lindex $forum 2]
+    <if @one_instance_p@ eq 0>
+      <ul>
+    </if>
+   
+    @data@
+  
+    <if @one_instance_p@ eq 0>
+      </ul>
+    </if>
 
-        # Skip forum groups with no forums
-        if {[llength $forum_forums] == 0} {
-                continue
-        }
+  </if>
+  <else>
+    <small>No Forums</small>
+  </else>
 
-        foreach one_forum $forum_forums {
-                if {!$ul_output_p} {
-                        template::adp_puts "<ul>"
-                        set ul_output_p 1
-                }
-                template::adp_puts "<li>"
-                
-                if {$display_group_name_p == "t"} {
-                        template::adp_puts " $forum_name:"
-                }
-
-                template::adp_puts " <a href=${forum_url}forum?forum_id=[lindex $one_forum 0]>[lindex $one_forum 1]</a>\n"
-        }
-
-}
-
-if {$ul_output_p} {
-        template::adp_puts "</ul>"
-} else {
-        template::adp_puts "<small>No Discussion Forums</small>"
-}
-%>
+</if>
+<else>
+  &nbsp;
+</else>
