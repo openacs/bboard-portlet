@@ -18,6 +18,7 @@ array set config $cf
 
 set shaded_p $config(shaded_p)
 set list_of_instance_ids $config(instance_id)
+set one_instance_p [ad_decode [llength $list_of_instance_ids] 1 1 0]
 
 db_multirow forums select_forums "
     select bboard_forums.bboard_id as package_id,
