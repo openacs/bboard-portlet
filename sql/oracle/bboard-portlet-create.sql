@@ -83,6 +83,15 @@ begin
 	value => ''
 );	
 
+  -- do we show the community name or not?
+  portal_datasource.set_def_param (
+	datasource_id => ds_id,
+	config_required_p => 't',
+	configured_p => 'f',
+	key => 'display_group_name_p',
+	value => 't'
+);	
+
 
 end;
 /

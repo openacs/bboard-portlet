@@ -51,5 +51,13 @@ foreach instance_id $list_of_instance_ids {
     lappend forums $one_forum
 }
 
+if {[info exists config(display_group_name_p)]} {
+    ns_log Notice "bboard-portlet: display_group_name_p: $config(display_group_name_p)"
+    set display_group_name_p $config(display_group_name_p)
+} else {
+    ns_log Notice "bboard-portlet: no display_group_name_p param"
+    set display_group_name_p t
+}
+
 # return the template
 ad_return_template	

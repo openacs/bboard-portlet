@@ -18,7 +18,13 @@ foreach forum $forums {
                         template::adp_puts "<ul>"
                         set ul_output_p 1
                 }
-                template::adp_puts "<li> $forum_name: <a href=${forum_url}forum?forum_id=[lindex $one_forum 0]>[lindex $one_forum 1]</a>\n"
+                template::adp_puts "<li>"
+                
+                if {$display_group_name_p == "t"} {
+                        template::adp_puts " $forum_name:"
+                }
+
+                template::adp_puts " <a href=${forum_url}forum?forum_id=[lindex $one_forum 0]>[lindex $one_forum 1]</a>\n"
         }
 
 }
