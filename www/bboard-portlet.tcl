@@ -18,7 +18,14 @@ foreach instance_id $list_of_instance_ids {
             -instance_id $instance_id
     ]
     
-    set f_check [db_0or1row one_forum_check {select 1 from bboard_forums where bboard_id = :instance_id} ]
+    set f_count [db_string forum_count {select count(*) from bboard_forums where bboard_id = :instance_id} ]
+    
+    if {$f_count == 0} {
+        set f_check 0
+    } else {
+        set f_check 1
+    }
+
 
     if {!$one_instance_p && $f_check} {
         append data "<li>$comm_name"
