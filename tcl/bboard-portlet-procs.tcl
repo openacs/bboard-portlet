@@ -16,7 +16,7 @@ namespace eval bboard_portlet {
     
     ad_proc -private my_name {
     } {
-	return "bboard-portlet"
+	return "bboard_portlet"
     }
     
     ad_proc -public get_pretty_name {
