@@ -1,4 +1,5 @@
 
+<ul>
 <%
 foreach forum $forums {
         set forum_name [lindex $forum 0]
@@ -10,13 +11,10 @@ foreach forum $forums {
                 continue
         }
 
-        template::adp_puts "<a href=$forum_url>$forum_name</a>
-        <ul>"
-
         foreach one_forum $forum_forums {
-                template::adp_puts "<li> <a href=${forum_url}forum?forum_id=[lindex $one_forum 0]>[lindex $one_forum 1]</a>\n"
+                template::adp_puts "<li> $forum_name: <a href=${forum_url}forum?forum_id=[lindex $one_forum 0]>[lindex $one_forum 1]</a>\n"
         }
 
-        template::adp_puts "</ul>"
 }
 %>
+</ul>
