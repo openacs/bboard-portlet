@@ -23,6 +23,11 @@ namespace eval bboard_portlet {
     } {
 	return "Discussion Forums"
     }
+
+    ad_proc -public link {
+    } {
+	return "bboard"
+    }
     
     ad_proc -public add_self_to_page { 
 	page_id 
@@ -146,7 +151,21 @@ namespace eval bboard_portlet {
 	return $output
 	
     }   
+
+    ad_proc -public edit { 
+	element_id
+    } {
+	 Display the PE's edit page
     
+	 @return HTML string
+	 @param cf A config array
+	 @author arjun@openforce.net
+	 @creation-date Nov 2001
+    } {
+	return ""
+    }
+
+
     ad_proc -public remove_self_from_page { 
 	portal_id 
 	instance_id 
