@@ -61,7 +61,6 @@ namespace eval bboard_admin_portlet {
                 -portlet_name [get_my_name]
         ]
 
-        # XXX AKS1 needs instance_id params???
         portal::set_element_param $element_id "instance_id" $instance_id
         return $element_id
     }
