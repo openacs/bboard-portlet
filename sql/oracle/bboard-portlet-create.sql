@@ -22,7 +22,7 @@ begin
     mime_type        => 'application/x-ats',
     name             => 'bboard-portlet',
     description      => 'Displays the bboard for a given instance_id ',
-    content_varchar  => '/packages/bboard-portlet/www/display'
+    content_varchar  => '/packages/bboard-portlet/www/display',
     configurable_p   => 't'
   );
 
