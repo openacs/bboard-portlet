@@ -64,6 +64,7 @@ namespace eval bboard_portlet {
 	
 	set query  "
         select 	message_id, 
+	forum_id
 	title, 
 	num_replies,
 	first_names||' '||last_name as full_name,
