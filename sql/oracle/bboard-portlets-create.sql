@@ -20,10 +20,9 @@ begin
   ds_id := portal_datasource.new(
     data_type        => 'raw',
     mime_type        => 'application/x-ats',
-    name             => 'Summarize bboard applications',
-    description      => 'Summarizes the bboard topics for all instances of bboard mounted below the current node',
-    content_varchar  => '/packages/bboard-portlet/www/summarize',
-    config_varchar   => '/packages/bboard-portlet/www/configure',
+    name             => 'bboard-portlet',
+    description      => 'Displays the bboard for a given instance_id ',
+    content_varchar  => '/packages/bboard-portlet/www/display'
     configurable_p   => 't'
   );
 end;
