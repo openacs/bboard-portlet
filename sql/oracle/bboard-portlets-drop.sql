@@ -21,7 +21,7 @@ begin
   begin 
     select datasource_id into ds_id
       from portal_datasources
-     where name = 'Summarize bboard applications';
+     where name = 'bboard-portlet';
    exception when no_data_found then
      ds_id := null;
   end;
