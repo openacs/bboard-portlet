@@ -26,7 +26,7 @@ namespace eval bboard_portlet {
 
     ad_proc -public link {
     } {
-	return "bboard"
+	return "forums"
     }
     
     ad_proc -public add_self_to_page { 
