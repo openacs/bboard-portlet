@@ -21,8 +21,7 @@ begin
   begin 
     select datasource_id into ds_id
       from portal_datasources
-     where name = 'Summarize bboard applications'
-       and package_key = 'bboard';
+     where name = 'Summarize bboard applications';
    exception when no_data_found then
      ds_id := null;
   end;
