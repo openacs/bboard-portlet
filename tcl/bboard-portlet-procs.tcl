@@ -21,7 +21,7 @@ namespace eval bboard_portlet {
     return "bboard-portlet"
     }
 
-    ad_proc add_self_to_page { page_id instance_id }  {
+    ad_proc -public add_self_to_page { page_id instance_id }  {
 	Adds a bboard PE to the given page with the instance key being
 	opaque data in the portal configuration.
     
