@@ -90,12 +90,12 @@ begin
 
   -- bboard-specific procs
 
-  -- Instance_id must be configured
+  -- package_id must be configured
   portal_datasource.set_def_param (
 	datasource_id => ds_id,
 	config_required_p => 't',
 	configured_p => 'f',
-	key => 'instance_id',
+	key => 'package_id',
 	value => ''
 );	
 

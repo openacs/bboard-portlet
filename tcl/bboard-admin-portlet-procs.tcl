@@ -17,19 +17,19 @@
 ad_library {
 
     Procedures to supports bboard admin portlets
-    
+
     @creation-date September 30 2001
-    @author arjun@openforce.net 
+    @author arjun@openforce.net
     @version $Id$
 }
 
 namespace eval bboard_admin_portlet {
-    
+
     ad_proc -private get_my_name {
     } {
 	return "bboard_admin_portlet"
     }
-    
+
     ad_proc -public get_pretty_name {
     } {
 	return "Bboard Administration"
@@ -39,53 +39,53 @@ namespace eval bboard_admin_portlet {
     } {
         return "bboard-portlet"
     }
-    
+
     ad_proc -public link {
     } {
         return ""
     }
-    
-    ad_proc -public add_self_to_page { 
-	portal_id 
-        instance_id
+
+    ad_proc -public add_self_to_page {
+	{-portal_id:required}
+        {-package_id:required}
     } {
 	Adds a bboard admin PE to the admin portal
-        
+
         @return new element_id
     } {
         # we use "portal::add_element" here since there is no
         # configuration necessary for this portlet (no params)
         set element_id [portal::add_element \
-                -pretty_name [get_pretty_name] \
-                -portal_id $portal_id \
-                -portlet_name [get_my_name]
+            -pretty_name [get_pretty_name] \
+            -portal_id $portal_id \
+            -portlet_name [get_my_name] \
         ]
 
-        portal::set_element_param $element_id "instance_id" $instance_id
+        portal::set_element_param $element_id package_id $package_id
         return $element_id
     }
-    
+
     ad_proc -public remove_self_from_page {
         portal_id
     } {
         Removes the bboard admin PE from the portal
     } {
         portal::remove_element \
-                -portal_id $portal_id \
-                -datasource_name [get_my_name]
+            -portal_id $portal_id \
+            -datasource_name [get_my_name]
     }
-        
-    ad_proc -public show { 
-	cf 
+
+    ad_proc -public show {
+	cf
     } {
     } {
         portal::show_proc_helper \
-                -package_key [my_package_key] \
-                -config_list $cf \
-                -template_src "bboard-admin-portlet"
-    }   
-    
-    ad_proc -public edit { 
+            -package_key [my_package_key] \
+            -config_list $cf \
+            -template_src "bboard-admin-portlet"
+    }
+
+    ad_proc -public edit {
         cf
     } {
     } {
@@ -93,5 +93,3 @@ namespace eval bboard_admin_portlet {
     }
 
 }
- 
-

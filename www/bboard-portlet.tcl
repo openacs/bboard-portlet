@@ -17,8 +17,8 @@
 array set config $cf	
 
 set shaded_p $config(shaded_p)
-set list_of_instance_ids $config(instance_id)
-set one_instance_p [ad_decode [llength $list_of_instance_ids] 1 1 0]
+set list_of_package_ids $config(package_id)
+set one_instance_p [ad_decode [llength $list_of_package_ids] 1 1 0]
 
 db_multirow forums select_forums "
     select bboard_forums.bboard_id as package_id,
@@ -31,7 +31,7 @@ db_multirow forums select_forums "
            bboard_forums.forum_id,
            bboard_forums.short_name
     from bboard_forums
-    where bboard_forums.bboard_id in ([join $list_of_instance_ids ,])
+    where bboard_forums.bboard_id in ([join $list_of_package_ids ,])
     order by parent_name,
              bboard_forums.short_name
 "
