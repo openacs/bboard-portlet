@@ -18,11 +18,11 @@ declare
   ds_id portal_datasources.datasource_id%TYPE;
 begin
   ds_id := portal_datasource.new(
-    data_type        => 'raw',
-    mime_type        => 'application/x-ats',
+    data_type        => 'tcl_proc',
+    mime_type        => 'text/html',
     name             => 'bboard-portlet',
     description      => 'Displays the bboard for a given instance_id ',
-    content_varchar  => '/packages/bboard-portlet/www/show',
+    content	     => 'bboard_portlet::show',
     configurable_p   => 't'
   );
 
