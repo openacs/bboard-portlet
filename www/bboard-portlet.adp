@@ -1,6 +1,10 @@
 
-<ul>
+
 <%
+if {[llength $forums] > 0} {
+        template::adp_puts "<ul>"
+}
+
 foreach forum $forums {
         set forum_name [lindex $forum 0]
         set forum_url [lindex $forum 1]
@@ -16,5 +20,8 @@ foreach forum $forums {
         }
 
 }
+
+if {[llength $forums] > 0} {
+        template::adp_puts "</ul>"
+}
 %>
-</ul>
