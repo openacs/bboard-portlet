@@ -71,50 +71,55 @@ namespace eval bboard_portlet {
 	to_char(last_reply_date,'MM/DD/YY hh12:Mi am') as last_updated
 	from bboard_messages_all b, persons, acs_objects ao
 	where b.forum_id = ao.object_id
-	and forum_id in (select forum_id from bboard_forums where bboard_id = $config(instance_id))
+	and forum_id in (select forum_id 
+	from bboard_forums 
+	where bboard_id = $config(instance_id))
 	and person_id = sender
 	and reply_to is null
 	order by sent_date desc"
-	
+
+	set shaded_query  "
+        select forum_id, short_name
+	from bboard_forums 
+	where bboard_id = $config(instance_id)"
+
 	set data ""
 	set rowcount 0
-	
-	db_foreach select_messages $query {
-	    # BEN OVERRIDE
-	    # append data "<tr><td>$title</td><td>$full_name</td><td>$num_replies</td><td>$last_updated</td>"
-	    append data "<li><a href=bboard/message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
-	    incr rowcount
-	} 
-	
-	set template "
-	<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">
-	<tr bgcolor=\"#ECECEC\">
-	<th align=\"left\">Subject</th> 
-	<th align=\"left\">Author</th>  
-	<th align=\"left\">Replies</th>
-	<th align=\"left\">Last update</th>
-	</tr>
-	$data
-	</table>"
 
-	## BEN TEMPLATE OVERRIDE
-	set template "<ul>
-	$data
-	</ul>"
-	
-	ns_log notice "AKS31 got here $rowcount"
-	
-	if {!$rowcount} {
-	    set template "<i>No messages</i>"
+	if { $config(shaded_p) == "f" } {
+	    
+	    db_foreach select_messages $query {
+		append data "<li><a href=bboard/message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
+		incr rowcount
+	    }
+	    
+	    set template "<ul>$data</ul>"
+	    
+	    if {!$rowcount} {
+		set template "<i>No messages</i>"
+	    }
+	    
+	    append template "<p><a href=bboard/>more...</a>"
+	    
+	} else {
+	    # shaded	
+	    set data "Forums: "
+
+	    db_foreach select_shaded $shaded_query {
+		append data "<a href=bboard/forum?forum_id=${forum_id}>$short_name</a>"
+		incr rowcount
+	    }
+	    
+	    set template "$data"
+	    
+	    if {!$rowcount} {
+		set template "<i>No forums</i>"
+	    }
 	}
-	
-	# Ben addition
-	append template "<p><a href=bboard/>more...</a>"
 
 	set code [template::adp_compile -string $template]
 	
 	set output [template::adp_eval code]
-	ns_log notice "AKS32 got here $output"
 	
 	return $output
 	
