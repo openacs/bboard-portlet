@@ -51,16 +51,15 @@ namespace eval bboard_portlet {
 	if {[llength $element_id_list] == 0} {
 	    # Tell portal to add this element to the page
 	    set element_id [portal::add_element $page_id [my_name]]
+	    # There is already a value for the param which must be overwritten
+	    portal::set_element_param $element_id instance_id $instance_id
 	    set package_id_list [list]
 	} else {
 	    set element_id [lindex $element_id_list 0]
-	    set package_id_list [split [portal::get_element_param $element_id instance_id] "|"]
+	    # There are existing values which should NOT be overwritten
+	    portal::add_element_param_value -element_id $element_id -key instance_id -value $instance_id
 	}
 
-	lappend package_id_list $instance_id
-
-	portal::set_element_param $element_id instance_id [join $package_id_list "|"]
-	
 	return $element_id
     }
     
@@ -99,7 +98,8 @@ namespace eval bboard_portlet {
 	where bboard_id = :instance_id"
 
 	set whole_data ""
-	set list_of_instance_ids [split $config(instance_id) "|"]
+	# Should be a list already! (ben)
+	set list_of_instance_ids $config(instance_id)
 
 	# Added by Ben
 	foreach instance_id $list_of_instance_ids {
@@ -181,19 +181,12 @@ namespace eval bboard_portlet {
 	# remove all elements
 	db_transaction {
 	    foreach element_id $element_ids {
-		# Added by Ben for multiple package support
-		set list_of_instance_ids [split [portal::get_element_param $element_id instance_id] "|"]
+		# Highly simplified (ben)
+		portal::remove_element_param_value -element_id $element_id -key instance_id -value $instance_id
 
-		ns_log Notice "list BEFORE removal: $list_of_instance_ids"
-		set pos [lsearch -exact $list_of_instance_ids $instance_id]
-		if {$pos > -1} {
-		    set new_list [lreplace list_of_instance_ids $pos $pos {}]
-		    ns_log Notice "list AFTER removal: $list_of_instance_ids"
-		    if {[llength $new_list] == 0} {
-			portal::remove_element $element_id
-		    } else {
-			portal::set_element_param $element_id instance_id [join $new_list "|"]
-		    }
+		# Check if we should really remove the element
+		if {[llength [portal::get_element_param_list -element_id $element_id -key instance_id]] == 0} {
+		    portal::remove_element $element_id
 		}
 	    }
 	}
