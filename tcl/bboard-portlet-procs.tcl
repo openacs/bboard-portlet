@@ -41,7 +41,7 @@ namespace eval bboard_portlet {
 	set element_id [portal::add_element $page_id [my_name]]
 	
 	# The default param "instance_id" must be configured
-#  	set key "instance_id"
+  	set key "instance_id"
 #  	set value [portal::get_element_param $element_id $key]
 	
 	portal::set_element_param $element_id $key $instance_id
