@@ -77,7 +77,7 @@ namespace eval bboard_portlet {
 	array set config $cf	
 	
 	set query  "
-        select 	message_id, 
+        select message_id, 
 	forum_id,
 	title, 
 	num_replies,
@@ -97,7 +97,12 @@ namespace eval bboard_portlet {
 	from bboard_forums 
 	where bboard_id = :instance_id"
 
-	set whole_data ""
+        #
+        # YES, I will clean this up! - aks
+        #
+
+
+	set whole_data "<table border=0 cellpadding=2 cellspacing=2 width=100%>"
 	# Should be a list already! (ben)
 	set list_of_instance_ids $config(instance_id)
 
@@ -114,44 +119,53 @@ namespace eval bboard_portlet {
                 from apm_packages
                 where package_id= :comm_object_id "]
 
-	    append whole_data "<font size=+1>$name</font> (<a href=${url}>more</a>)<br>"
+	    append whole_data "<tr><td><a href=${url}><b>$name</b> forums</a></td></tr>"
 
 	    set data ""
 	    set rowcount 0
+            
+# removed individual msg stuff
+# 
+#            if { $config(shaded_p) == "f" } {
+#                
+#                db_foreach select_messages $query {
+#                    append data "<li><a href=${url}message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
+#                    incr rowcount
+#                }
+#                
+#                set template "<ul>$data</ul>"
+#                
+#                if {!$rowcount} {
+#                    set template "<i>No messages</i>"
+#                }
+#                
+#                append template "<p>"
+#                
+#            } else {
+#                # shaded	
+#
+ 
+        set data ""		
+        db_foreach select_shaded $shaded_query {
+                if { $config(shaded_p) == "f" } {
+                    append data "<tr><td>&nbsp;&nbsp;<a href=${url}forum?forum_id=${forum_id}>$short_name</a></td></tr>"
+                } 
+            incr rowcount
+        }
+    
+    set template "$data"
+    
+    if {!$rowcount} {
+        set template "<tr><td><i>No discussion forums</i></td></tr>"
+    }
+# }
 
-	    if { $config(shaded_p) == "f" } {
-		
-		db_foreach select_messages $query {
-		    append data "<li><a href=${url}message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
-		    incr rowcount
-		}
-		
-		set template "<ul>$data</ul>"
-		
-		if {!$rowcount} {
-		    set template "<i>No messages</i>"
-		}
-		
-		append template "<p>"
-		
-	    } else {
-		# shaded	
-		set data "Forums: "
-		
-		db_foreach select_shaded $shaded_query {
-		    append data "<a href=${url}forum?forum_id=${forum_id}>$short_name</a>"
-		    incr rowcount
-		}
-		
-		set template "$data"
-		
-		if {!$rowcount} {
-		    set template "<i>No forums</i>"
-		}
-	    }
+append whole_data $template
 
-	    append whole_data $template
-	}
+
+}
+
+append whole_data "</table>"
 
 	set code [template::adp_compile -string $whole_data]
 	
