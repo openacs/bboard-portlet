@@ -54,12 +54,12 @@ namespace eval bboard_portlet {
 	    set package_id_list [list]
 	} else {
 	    set element_id [lindex $element_id_list 0]
-	    set package_id_list [portal::get_element_param $element_id instance_id]
+	    set package_id_list [split [portal::get_element_param $element_id instance_id] "|"]
 	}
 
 	lappend package_id_list $instance_id
 
-	portal::set_element_param $element_id instance_id $package_id_list
+	portal::set_element_param $element_id instance_id [join $package_id_list "|"]
 	
 	return $element_id
     }
@@ -99,13 +99,11 @@ namespace eval bboard_portlet {
 	where bboard_id = :instance_id"
 
 	set whole_data ""
-	set list_of_instance_ids $config(instance_id)
+	set list_of_instance_ids [split $config(instance_id) "|"]
 
 	# Added by Ben
 	foreach instance_id $list_of_instance_ids {
-	    if {[llength $list_of_instance_ids] > 1} {
-		append whole_data "<font size=+1><b>[db_string select_name "select name from site_nodes where object_id=:instance_id" -default ""]</b></font><br>"
-	    }
+	    append whole_data "<font size=+1><b>[db_string select_name "select name from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" -default ""]</b></font> (<a href=[dotlrn_community::get_url_from_package_id -package_id $instance_id]>more</a>)<br>"
 
 	    set data ""
 	    set rowcount 0
@@ -123,7 +121,7 @@ namespace eval bboard_portlet {
 		    set template "<i>No messages</i>"
 		}
 		
-		append template "<p><a href=bboard/>more...</a>"
+		append template "<p>"
 		
 	    } else {
 		# shaded	
@@ -184,15 +182,17 @@ namespace eval bboard_portlet {
 	db_transaction {
 	    foreach element_id $element_ids {
 		# Added by Ben for multiple package support
-		set list_of_instance_ids [portal::get_element_param $element_id instance_id]
+		set list_of_instance_ids [split [portal::get_element_param $element_id instance_id] "|"]
 
+		ns_log Notice "list BEFORE removal: $list_of_instance_ids"
 		set pos [lsearch -exact $list_of_instance_ids $instance_id]
 		if {$pos > -1} {
 		    set new_list [lreplace list_of_instance_ids $pos $pos {}]
+		    ns_log Notice "list AFTER removal: $list_of_instance_ids"
 		    if {[llength $new_list] == 0} {
 			portal::remove_element $element_id
 		    } else {
-			portal::set_element_param $element_id instance_id $new_list
+			portal::set_element_param $element_id instance_id [join $new_list "|"]
 		    }
 		}
 	    }
