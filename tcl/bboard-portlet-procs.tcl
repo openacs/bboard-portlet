@@ -49,16 +49,22 @@ namespace eval bboard_portlet {
     ad_proc -public add_self_to_page {
 	{-portal_id:required}
 	{-package_id:required}
+	{-display_group_name_p:required}
+	{-param_action:required}
     } {
 	Adds a bboard PE to the given portal or appends the given bboard package_id
         to the bboard PE that already on the portal
     } {
-        return [portal::add_element_or_append_id \
+        return [portal::add_element_parameters \
             -portal_id $portal_id \
             -portlet_name [get_my_name] \
             -pretty_name [get_pretty_name] \
-            -value_id $package_id \
-            -force_region [ad_parameter "bboard_portlet_region" [my_package_key]] \
+            -value $package_id \
+            -force_region [parameter::get_from_package_key \
+                               -package_key [my_package_key] \
+                               -parameter "bboard_portlet_region"] \
+            -extra_params [list "display_group_name_p" $display_group_name_p] \
+            -param_action $param_action
         ]
     }
 
@@ -69,10 +75,10 @@ namespace eval bboard_portlet {
     } {
 	Removes a bboard PE from the given page or just the given bboard's package_id
     } {
-        portal::remove_element_or_remove_id \
+        portal::remove_element_parameters \
             -portal_id $portal_id \
             -portlet_name [get_my_name] \
-            -value_id $package_id
+            -value $package_id
     }
 
     ad_proc -public show {
