@@ -44,33 +44,7 @@ namespace eval bboard_portlet {
 
 	return $element_id
     }
-
-    ad_proc remove_self_from_page { portal_id instance_id }  {
-	Removes a bboard PE from the given page 
-    
-	@param page_id The page to remove self from
-	@author arjun@openforce.net
-	@creation-date Sept 2001
-    } {
-	# Find out the element_id that corresponds to this instance_id
-	if { [db0or1row get_element_id "
-	select pem.element_id as element_id
-	from portal_element_parameters pep, portal_element_map pem
-	where pem.portal_id = $portal_id and
-	pep.element_id = pem.element_id and
-	pep.key = 'instance_id' and
-	pep.value = $instance_id"] } {
-	    # do it
-	} else {
-	    ad_return_complaint 1 "bboard_portlet::remove_self_from_page: Invalid portal_id and/or instance_id given."
-	    ad_script_abort
-	}
-
-	# this call removes the PEs params too
-	set element_id [portal::remove_element {$portal_id $element_id}]
-    }
-
-    ad_proc show { cf }  {
+    ad_proc -public show { cf }  {
 	Display the PE
     
 	@param cf A config array
@@ -83,5 +57,36 @@ namespace eval bboard_portlet {
 	return "<b>[array get cf]</b>"
 
     }
+
+    ad_proc -public remove_self_from_page { portal_id instance_id }  {
+	Removes a bboard PE from the given page 
+    
+	@param page_id The page to remove self from
+	@param instance_id
+	@author arjun@openforce.net
+	@creation-date Sept 2001
+    } {
+	# Find out the element_id that corresponds to this instance_id
+	if { [db0or1row get_element_id "
+	select pem.element_id as element_id
+	from portal_element_parameters pep, portal_element_map pem
+	where pem.portal_id = $portal_id and
+	pep.element_id = pem.element_id and
+	pep.key = 'instance_id' and
+	pep.value = $instance_id"]  } {
+	    
+	    # delete the params
+	    # delete the element from the map
+	    ns_log Notice "foo"
+
+	} else {
+	    ad_return_complaint 1 "bboard_portlet::remove_self_from_page: Invalid portal_id and/or instance_id given."
+	    ad_script_abort
+	}
+
+	# this call removes the PEs params too
+	set element_id [portal::remove_element {$portal_id $element_id}]
+    }
+
 
 } # namespace
