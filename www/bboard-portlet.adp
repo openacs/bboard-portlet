@@ -1,10 +1,8 @@
 
 
 <%
-if {[llength $forums] > 0} {
-        template::adp_puts "<ul>"
-}
-
+set ul_output_p 0
+        
 foreach forum $forums {
         set forum_name [lindex $forum 0]
         set forum_url [lindex $forum 1]
@@ -16,12 +14,16 @@ foreach forum $forums {
         }
 
         foreach one_forum $forum_forums {
+                if {!$ul_output_p} {
+                        template::adp_puts "<ul>"
+                        set ul_output_p 1
+                }
                 template::adp_puts "<li> $forum_name: <a href=${forum_url}forum?forum_id=[lindex $one_forum 0]>[lindex $one_forum 1]</a>\n"
         }
 
 }
 
-if {[llength $forums] > 0} {
+if {$ul_output_p} {
         template::adp_puts "</ul>"
 }
 %>
