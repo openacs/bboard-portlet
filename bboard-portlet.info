@@ -7,15 +7,15 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="0.1a" url="http://dotlrn.openforce.net/bboard-portlet-0.1a.apm">
+    <version name="2.0." url="http://dotlrn.openforce.net/bboard-portlet-2.0.2.apm">
     <database-support>
         <database>oracle</database>
         <database>postgresql</database>
     </database-support>
         <owner url="mailto:arjun@openforce.net">Arjun Sanyal</owner>
-        <vendor url="http://openforce.net/">OpenForce, Inc.</vendor>
+        <vendor url="http://openacs.org">OpenACS</vendor>
 
-        <provides url="bboard-portlet" version="0.1a"/>
+        <provides url="bboard-portlet" version="2.0.2"/>
         <requires url="new-portal" version="0.1a"/>
 
         <files>
