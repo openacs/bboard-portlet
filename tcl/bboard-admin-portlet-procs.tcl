@@ -21,7 +21,7 @@ namespace eval bboard_admin_portlet {
     
     ad_proc -public get_pretty_name {
     } {
-	return "Discussion Forums Administration"
+	return "Bboard Administration"
     }
 
     ad_proc -private my_package_key {
@@ -31,7 +31,7 @@ namespace eval bboard_admin_portlet {
     
     ad_proc -public link {
     } {
-	return "forums"
+	return "bboards"
     }
     
     ad_proc -public add_self_to_page { 

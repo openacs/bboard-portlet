@@ -14,7 +14,7 @@
 
   </if>
   <else>
-    <small>No Forums</small>
+    <small>No Bboards</small>
   </else>
 
 </if>

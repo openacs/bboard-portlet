@@ -21,7 +21,7 @@ namespace eval bboard_portlet {
     
     ad_proc -public get_pretty_name {
     } {
-	return "Discussion Forums"
+	return "Bboards"
     }
 
     ad_proc -private my_package_key {
@@ -31,7 +31,7 @@ namespace eval bboard_portlet {
 
     ad_proc -public link {
     } {
-	return "forums"
+	return "bboards"
     }
     
     ad_proc -public add_self_to_page { 
@@ -55,7 +55,7 @@ namespace eval bboard_portlet {
 
 	if {[llength $element_id_list] == 0} {
 	    # Tell portal to add this element to the page
-	    set element_id [portal::add_element -pretty_name "Forums"  $portal_id [my_name]]
+	    set element_id [portal::add_element -pretty_name "Bboards"  $portal_id [my_name]]
 	    # There is already a value for the param which must be overwritten
 	    portal::set_element_param $element_id instance_id $instance_id
 	    set package_id_list [list]

@@ -1,5 +1,5 @@
 <if @forums:rowcount@ eq 0>
-<i>No discussion forums</i>
+<i>No bboards</i>
 </if>
 <else>
 <ul>
@@ -9,4 +9,4 @@
 </ul>
 </else>
 <p>
-<a href=@url@forum-new>New Forum</a>
+<a href=@url@forum-new>New Bboard</a>
