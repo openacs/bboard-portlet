@@ -119,7 +119,7 @@ namespace eval bboard_portlet {
                 from apm_packages
                 where package_id= :comm_object_id "]
 
-	    append whole_data "<tr><td><a href=${url}><b>$name</b> forums</a></td></tr>"
+	    append whole_data "<tr><td><a href=${url}><b>$name</b></a></td></tr>"
 
 	    set data ""
 	    set rowcount 0
