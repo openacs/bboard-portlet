@@ -197,3 +197,5 @@ end;
 /
 show errors
 
+@bboard-admin-portlet-create.sql
+

@@ -24,6 +24,11 @@ namespace eval bboard_admin_portlet {
 	return "Discussion Forums Administration"
     }
 
+    ad_proc -private my_package_key {
+    } {
+        return "bboard-portlet"
+    }
+    
     ad_proc -public link {
     } {
 	return "forums"
@@ -73,68 +78,11 @@ namespace eval bboard_admin_portlet {
 	@author arjun@openforce.net
 	@creation-date Sept 2001
     } {
-	
-	array set config $cf	
-	
-	set query  "
-        select forum_id, short_name
-	from bboard_forums 
-	where bboard_id = :instance_id"
-
-        #
-        # YES, I will clean this up! - aks
-        #
-
-
-	set whole_data "<ul>"
-	# Should be a list already! (ben)
-	set list_of_instance_ids $config(instance_id)
-        
-        if {[llength $list_of_instance_ids] > 1} {
-            # We have a problem!
-            return -code error "There should be only one instance of bboard for admin purposes"
-        }
-        
-        set instance_id [lindex $list_of_instance_ids 0]
-
-        set url [dotlrn_community::get_url_from_package_id -package_id $instance_id]
-
-        # aks fold into site_nodes:: or dotlrn_community
-        set comm_object_id [db_string select_name "select object_id from site_nodes where node_id= (select parent_id from site_nodes where object_id=:instance_id)" ]
-
-        set name [db_string select_pretty_name "
-        select instance_name 
-        from apm_packages
-        where package_id= :comm_object_id "]
-
-        # append whole_data "<tr><td colspan=2> <a href=${url}><b>$name</b> forums</a></td></tr>"
-
-        set data ""
-        set rowcount 0
-        
-        db_foreach select_forums $query {
-            append data "<li> <a href=${url}forum?forum_id=${forum_id}>$short_name</a> &nbsp; - &nbsp; <a href=${url}forum-edit?forum_id=${forum_id}>Administration</a>\n"
-            incr rowcount
-        }
-        
-        set template "$data"
-        
-        if {!$rowcount} {
-            set template "<i>No discussion forums</i>"
-        }
-
-        append whole_data $template
-        
-        
-        append whole_data "<p>
-        <li> <a href=${url}forum-new>New Forum</a></ul>"
-        
-	set code [template::adp_compile -string $whole_data]
-	
-	set output [template::adp_eval code]
-	
-	return $output
-	
+        # no return call required with the helper proc
+        portal::show_proc_helper \
+                -package_key [my_package_key] \
+                -config_list $cf \
+                -template_src "bboard-admin-portlet"
     }   
     
     ad_proc -public edit { 
