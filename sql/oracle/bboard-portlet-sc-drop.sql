@@ -31,6 +31,13 @@ begin
 	       'GetPrettyName'
 	);
 
+
+	foo := acs_sc_impl.delete_alias (
+	       'portal_datasource',
+	       'bboard_portlet',
+	       'Link'
+	);
+
 	foo := acs_sc_impl.delete_alias (
 	       'portal_datasource',
 	       'bboard_portlet',
@@ -41,6 +48,12 @@ begin
 	       'portal_datasource',
 	       'bboard_portlet',
 	       'Show'
+	);
+
+	foo := acs_sc_impl.delete_alias (
+	       'portal_datasource',
+	       'bboard_portlet',
+	       'Edit'
 	);
 
 	foo := acs_sc_impl.delete_alias (

@@ -45,6 +45,14 @@ begin
 	foo := acs_sc_impl.new_alias (
 	       'portal_datasource',
 	       'bboard_portlet',
+	       'Link',
+	       'bboard_portlet::link',
+	       'TCL'
+	);
+
+	foo := acs_sc_impl.new_alias (
+	       'portal_datasource',
+	       'bboard_portlet',
 	       'AddSelfToPage',
 	       'bboard_portlet::add_self_to_page',
 	       'TCL'
@@ -55,6 +63,14 @@ begin
 	       'bboard_portlet',
 	       'Show',
 	       'bboard_portlet::show',
+	       'TCL'
+	);
+
+	foo := acs_sc_impl.new_alias (
+	       'portal_datasource',
+	       'bboard_portlet',
+	       'Edit',
+	       'bboard_portlet::edit',
 	       'TCL'
 	);
 
