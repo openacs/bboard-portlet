@@ -26,6 +26,6 @@ foreach forum $forums {
 if {$ul_output_p} {
         template::adp_puts "</ul>"
 } else {
-        template::adp_puts "<small>No Bboards</small>"
+        template::adp_puts "<small>No Discussion Forums</small>"
 }
 %>
