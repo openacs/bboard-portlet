@@ -55,9 +55,49 @@ namespace eval bboard_portlet {
 	 @creation-date Sept 2001
     } {
 
-	 array set config $cf	
+	array set config $cf	
 
-	 return "<b>This is the instance_id $config(instance_id)</b>"
+	set query  "
+        select 	message_id, 
+	title, 
+	num_replies,
+	first_names||' '||last_name as full_name,
+	to_char(last_reply_date,'MM/DD/YY hh12:Mi am') as last_updated
+	from bboard_messages_all b, persons, acs_objects ao
+	where b.forum_id = ao.object_id
+	and ao.context_id = $config(instance_id)
+	and person_id = sender
+	and reply_to is null
+	order by sent_date desc"
+
+	set data ""
+	set data:rowcount 0
+
+	db_foreach select_messages $query {
+	    append data "<tr><td>$title</td><td>$full_name</td><td>$num_replies</td><td>$last_updated</td>"
+	    incr data:rowcount
+	} 
+
+
+	set template "
+
+	<table celpadding=\"0\" cellspacing=\"0\" border=\"0\">
+	<tr bgcolor=\"#ECECEC\">
+	<th align=\"left\">Subject</th> 
+	<th align=\"left\">Author</th>  
+	<th align=\"left\">Replies</th>
+	<th align=\"left\">Last update</th>
+	</tr>
+	$data
+	</table>
+		"
+
+	set code [template::adp_compile -string $template]
+	ns_log notice "AKS31 got here $code"
+	set output [template::adp_eval code]
+	ns_log notice "AKS32 got here $output"
+	
+	return $output
 
     }
 
