@@ -66,13 +66,13 @@ namespace eval bboard_admin_portlet {
     }
 
     ad_proc -public remove_self_from_page {
-        portal_id
+        {-portal_id:required}
     } {
         Removes the bboard admin PE from the portal
     } {
         portal::remove_element \
             -portal_id $portal_id \
-            -datasource_name [get_my_name]
+            -portlet_name [get_my_name]
     }
 
     ad_proc -public show {
