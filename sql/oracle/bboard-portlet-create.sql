@@ -21,8 +21,7 @@ declare
 begin
   ds_id := portal_datasource.new(
     name             => 'bboard_portlet',
-    description      => 'Displays the bboard for a given instance_id ',
-    configurable_p   => 't'
+    description      => 'Displays the bboard for a given instance_id '
   );
 
   -- Instance_id must be configured
@@ -42,6 +41,16 @@ begin
 	key => 'shaded_p',
 	value => 'f'
 );	
+
+  -- user_editable_p 
+  portal_datasource.set_def_param (
+	datasource_id => ds_id,
+	config_required_p => 't',
+	configured_p => 't',
+	key => 'user_editable_p',
+	value => 'f'
+);	
+
 
 end;
 /
