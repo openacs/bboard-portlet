@@ -14,11 +14,13 @@
 -- License version 2 or higher.  Full text of the license is available
 -- from the GNU Project: http://www.fsf.org/copyleft/gpl.html
 
+@bboard-portlet-sc-create.sql
+
 declare
   ds_id portal_datasources.datasource_id%TYPE;
 begin
   ds_id := portal_datasource.new(
-    name             => 'bboard-portlet',
+    name             => 'bboard_portlet',
     description      => 'Displays the bboard for a given instance_id ',
     configurable_p   => 't'
   );
