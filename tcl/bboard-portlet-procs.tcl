@@ -69,4 +69,17 @@ namespace eval bboard_portlet {
 	# this call removes the PEs params too
 	set element_id [portal::remove_element {$portal_id $element_id}]
     }
+
+    ad_proc show { cf }  {
+	Display the PE
+    
+	@param cf A config array
+	@author arjun@openforce.net
+	@creation-date Sept 2001
+    } {
+
+	ns_log notice "AKS28 [array get cf]"
+	
+	return "<b>[array get cf]</b>"
+
 } # namespace
