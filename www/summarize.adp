@@ -1,21 +1,25 @@
 <ul>
 
-<if @bboard:rowcount@ eq 0>
-  <li>There are no bboard applications mounted here. You can <a href=@subsite_url@admin/site-map/auto-mount?package_key=bboard&node_id=@node_id@>mount one if you like</a>
+<if @forum_info:rowcount@ eq 0>
+  <li>Bad forum_id sent to this datasource, sorry</a>
 </if>
-
 <else>
-  <multiple name="bboard">
-    <li><a href=@bboard.url@>@bboard.bboard_name@</a>
-    <ul>
-      <group column="bboard_name">
-      <if @bboard.short_name@ not nil>
-        <li><a href="@bboard.url@forum?forum_id=@bboard.forum_id@">@bboard.short_name@</a>
-      </if>
-      </group>
-      <li><a href="@bboard.url@forum-new">Create a new topic</a>
-    </ul>
+  <if @messages:rowcount@ eq 0>
+  <i>There are no messages available.</i><p>
+  </if>
+  <else>
+  <table>
+  <multiple name=messages>
+   <tr>
+    <td><a href="<%=[bboard_message_url @messages.message_id@ @forum_id@]%>">@messages.title@</a></td>
+     <td>@messages.full_name@</td> 
+     <td><%= [expr @messages.num_replies@-1] %></td>
+     <if @sent_date_p@ not nil and @sent_date_p@ ne 0>
+     <td>@messages.sent_date@</td>
+     </if>	
+   </tr>
   </multiple>
+  </table>
+  </else>
 </else>
 
-</ul>
