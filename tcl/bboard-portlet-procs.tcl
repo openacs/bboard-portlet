@@ -37,14 +37,22 @@ namespace eval bboard_portlet {
 	@author arjun@openforce.net
 	@creation-date Sept 2001
     } {
-	# Tell portal to add this element to the page
-	set element_id [portal::add_element $page_id [my_name]]
-	
-	# The default param "instance_id" must be configured
-  	set key "instance_id"
-#  	set value [portal::get_element_param $element_id $key]
-	
-	portal::set_element_param $element_id $key $instance_id
+	# Add some smarts to only add one portlet for now when it's added multiple times (ben)
+	# Find out if bboard already exists
+	set element_id_list [portal::get_element_ids_by_ds $page_id [my_name]]
+
+	if {[llength $element_id_list] == 0} {
+	    # Tell portal to add this element to the page
+	    set element_id [portal::add_element $page_id [my_name]]
+	    set package_id_list [list]
+	} else {
+	    set element_id [lindex $element_id_list 0]
+	    set package_id_list [portal::get_element_param $element_id instance_id]
+	}
+
+	lappend package_id_list $instance_id
+
+	portal::set_element_param $element_id instance_id $package_id_list
 	
 	return $element_id
     }
@@ -73,7 +81,7 @@ namespace eval bboard_portlet {
 	where b.forum_id = ao.object_id
 	and forum_id in (select forum_id 
 	from bboard_forums 
-	where bboard_id = $config(instance_id))
+	where bboard_id = :instance_id)
 	and person_id = sender
 	and reply_to is null
 	order by sent_date desc"
@@ -81,43 +89,55 @@ namespace eval bboard_portlet {
 	set shaded_query  "
         select forum_id, short_name
 	from bboard_forums 
-	where bboard_id = $config(instance_id)"
+	where bboard_id = :instance_id"
 
-	set data ""
-	set rowcount 0
+	set whole_data ""
+	set list_of_instance_ids $config(instance_id)
 
-	if { $config(shaded_p) == "f" } {
-	    
-	    db_foreach select_messages $query {
-		append data "<li><a href=bboard/message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
-		incr rowcount
+	# Added by Ben
+	foreach instance_id $list_of_instance_ids {
+	    if {[llength $list_of_instance_ids] > 1} {
+		append whole_data "<font size=+1><b>[db_string select_name "select name from site_nodes where object_id=:instance_id" -default ""]</b></font><br>"
 	    }
-	    
-	    set template "<ul>$data</ul>"
-	    
-	    if {!$rowcount} {
-		set template "<i>No messages</i>"
-	    }
-	    
-	    append template "<p><a href=bboard/>more...</a>"
-	    
-	} else {
-	    # shaded	
-	    set data "Forums: "
 
-	    db_foreach select_shaded $shaded_query {
-		append data "<a href=bboard/forum?forum_id=${forum_id}>$short_name</a>"
-		incr rowcount
+	    set data ""
+	    set rowcount 0
+
+	    if { $config(shaded_p) == "f" } {
+		
+		db_foreach select_messages $query {
+		    append data "<li><a href=bboard/message?forum_id=${forum_id}&message_id=${message_id}>$title</a>, by <i>$full_name</i>\n"
+		    incr rowcount
+		}
+		
+		set template "<ul>$data</ul>"
+		
+		if {!$rowcount} {
+		    set template "<i>No messages</i>"
+		}
+		
+		append template "<p><a href=bboard/>more...</a>"
+		
+	    } else {
+		# shaded	
+		set data "Forums: "
+		
+		db_foreach select_shaded $shaded_query {
+		    append data "<a href=bboard/forum?forum_id=${forum_id}>$short_name</a>"
+		    incr rowcount
+		}
+		
+		set template "$data"
+		
+		if {!$rowcount} {
+		    set template "<i>No forums</i>"
+		}
 	    }
-	    
-	    set template "$data"
-	    
-	    if {!$rowcount} {
-		set template "<i>No forums</i>"
-	    }
+
+	    append whole_data $template
 	}
 
-	set code [template::adp_compile -string $template]
+	set code [template::adp_compile -string $whole_data]
 	
 	set output [template::adp_eval code]
 	
@@ -142,7 +162,18 @@ namespace eval bboard_portlet {
 	# remove all elements
 	db_transaction {
 	    foreach element_id $element_ids {
-		portal::remove_element $element_id
+		# Added by Ben for multiple package support
+		set list_of_instance_ids [portal::get_element_param $element_id instance_id]
+
+		set pos [lsearch -exact $list_of_instance_ids $instance_id]
+		if {$pos > -1} {
+		    set new_list [lreplace list_of_instance_ids $pos $pos {}]
+		    if {[llength $new_list] == 0} {
+			portal::remove_element $element_id
+		    } else {
+			portal::set_element_param $element_id instance_id $new_list
+		    }
+		}
 	    }
 	}
     }
