@@ -18,52 +18,17 @@ array set config $cf
 
 set shaded_p $config(shaded_p)
 set list_of_instance_ids $config(instance_id)
-set data ""
 
-if {[llength $list_of_instance_ids] == 1} {
-    set one_instance_p 1
-} else {
-    set one_instance_p 0
-}
-
-
-foreach instance_id $list_of_instance_ids {
-    
-    set comm_url [dotlrn_community::get_url_from_package_id -package_id $instance_id]
-    set comm_name [site_nodes::get_parent_name \
-            -instance_id $instance_id
-    ]
-    
-    set f_count [db_string forum_count {select count(*) from bboard_forums where bboard_id = :instance_id} ]
-    
-    if {$f_count == 0} {
-        set f_check 0
-    } else {
-        set f_check 1
-    }
-
-
-    if {!$one_instance_p && $f_check} {
-        append data "<li>$comm_name"
-        append data "<ul>"
-    }
-
-    db_foreach forums_select {
-        select forum_id, short_name 
-        from bboard_forums 
-        where bboard_id = :instance_id
-    } {
-        append data "<li><a href=${comm_url}forum?forum_id=$forum_id>$short_name</a>"
-    }
-    
-    if {!$one_instance_p && $f_check} {
-        append data "</ul>"
-    }
-}
-
-# portlets shouldn't disappear anymore (ben)
-if {[empty_string_p $data]} {
-    set no_forums_p "t"
-} else {
-    set no_forums_p "f"
-}
+db_multirow forums select_forums "
+    select bboard_forums.bboard_id as package_id,
+           (select apm_packages.instance_name
+            from apm_packages
+            where apm_packages.package_id = apm_package.parent_id(bboard_forums.bboard_id)) as community_name,
+           (select site_node.url(site_nodes.node_id)
+            from site_nodes
+            where site_nodes.object_id = bboard_forums.bboard_id) as url,
+           bboard_forums.forum_id,
+           bboard_forums.short_name
+    from bboard_forums
+    where bboard_forums.bboard_id in ([join $list_of_instance_ids ,])
+"

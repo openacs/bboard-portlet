@@ -20,17 +20,35 @@
 
 <if @shaded_p@ ne "t">
 
-  <if @no_forums_p@ eq "f">
+  <if @forums:rowcount@ gt 0>
 
-    <if @one_instance_p@ eq 0>
-      <ul>
-    </if>
-   
-    @data@
-  
-    <if @one_instance_p@ eq 0>
-      </ul>
-    </if>
+<%
+    set new_package_id ""
+    set old_package_id ""
+%>
+
+<multiple name="forums"
+
+<% set new_package_id $forums(package_id) %>
+
+  <if @new_package_id@ ne @old_package_id@>
+    <li>@forums.community_name@
+    <ul>
+  </if>
+
+    <li>
+      <a href="@forums.url@forum?forum_id=@forums.forum_id@">@forums.short_name@</a>
+    </li>
+
+<%
+    set old_package_id $new_package_id
+%>
+
+  <if @new_package_id@ ne @old_package_id@>
+    </ul>
+  </if>
+
+</multiple>
 
   </if>
   <else>
