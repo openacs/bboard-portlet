@@ -82,4 +82,6 @@ namespace eval bboard_portlet {
 	
 	return "<b>[array get cf]</b>"
 
+    }
+
 } # namespace
