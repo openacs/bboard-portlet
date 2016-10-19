@@ -6,7 +6,6 @@
     <pretty-plural>Bboard Portlet</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
-    <maturity>4</maturity>
 
     <version name="2.0." url="http://dotlrn.openforce.net/bboard-portlet-2.0.2.apm">
     <database-support>
@@ -15,6 +14,7 @@
     </database-support>
         <owner url="mailto:arjun@openforce.net">Arjun Sanyal</owner>
         <vendor url="http://openacs.org">OpenACS</vendor>
+        <maturity>4</maturity>
 
         <provides url="bboard-portlet" version="2.0.2"/>
         <requires url="new-portal" version="0.1a"/>
