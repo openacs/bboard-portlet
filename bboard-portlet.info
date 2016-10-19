@@ -6,6 +6,7 @@
     <pretty-plural>Bboard Portlet</pretty-plural>
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
+    <maturity>4</maturity>
 
     <version name="2.0." url="http://dotlrn.openforce.net/bboard-portlet-2.0.2.apm">
     <database-support>
